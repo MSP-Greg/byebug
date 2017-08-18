@@ -2,23 +2,38 @@
 
 version: "{build}"
 
+init:
+  - set PATH=C:\ruby%ruby_version%\bin;C:\Program Files\Git\cmd;C:\msys64\usr\bin;C:\msys64\mingw64\bin;C:\Program Files\7-Zip;C:\Program Files\AppVeyor\BuildAgent;C:\Windows\system32
+  - if %ruby_version%==2.3.4u (
+      appveyor DownloadFile https://dl.bintray.com/msp-greg/ruby_windows/ruby2.3.4u.7z -FileName C:/ruby2.3.4u.7z &
+      7z x C:/ruby2.3.4u.7z -oC:/ruby2.3.4u & C:/ruby2.3.4u/ruby2.3.4u_install.cmd)
+  - if %ruby_version%==_trunk (
+      appveyor DownloadFile https://dl.bintray.com/msp-greg/ruby_windows/ruby_trunk.7z -FileName C:/ruby_trunk.7z &
+      7z x C:/ruby_trunk.7z -oC:/ruby_trunk & C:/ruby_trunk/trunk_install.cmd)
+
 install:
-  - set PATH=C:\Ruby%ruby_version%\bin;%PATH%
   - echo %PATH%
 
   - ruby --version
   - where ruby
 
-  - gem update --system --no-document
   - gem --version
   - where gem
 
-  - gem install bundler --no-document
+  - git --version
+  - where git
+
   - bundler --version
   - where bundler
 
-  - bundle install --jobs 3 --retry 3
-
+    # see https://github.com/bundler/bundler/issues/5344
+  - bundle config force_ruby_platform true
+    # not sure if next two lines are required, I have the option set in my .gemrc file
+  - bundle config build.ffi --use-system-libraries
+  - bundle config rainbow.ffi --use-system-libraries
+  - bundle install --jobs=3 --retry=3
+  - gem list
+ 
 build_script:
   - bundle exec rake clobber
   - bundle exec rake compile
@@ -28,26 +43,11 @@ test_script:
 
 environment:
   matrix:
-    - ruby_version: '22'
-    - ruby_version: 22-x64
-    - ruby_version: '23'
-    - ruby_version: 23-x64
-    - ruby_version: '24'
-    - ruby_version: 24-x64
-
-  codeclimate_repo_token: '02530029b1e956220f05076c590b84b9ab078362c9083312eb2ad
-41cab138408'
+    - ruby_version: "2.3.4u"
+    - ruby_version: "24-x64"
+    - ruby_version: "_trunk"
 
 matrix:
   fast_finish: true
-
-branches:
-  only:
-    - master
-
-notifications:
-  - provider: Email
-
-    on_build_success: false
-    on_build_failure: false
-    on_build_status_changed: true
+  allow_failures:
+    - ruby_version: "_trunk"
