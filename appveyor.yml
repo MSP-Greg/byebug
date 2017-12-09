@@ -1,7 +1,13 @@
 ---
+# Last cache clean 2017-12-10
+
 init:
+  # Since cache is just gems...
+  - set APPVEYOR_SAVE_CACHE_ON_ERROR=true
+
   # clean path up to just what we need
   - set PATH=C:\ruby%ruby_version%\bin;C:\Program Files\Git\cmd;C:\Program Files\7-Zip;C:\Program Files\AppVeyor\BuildAgent;C:\Windows\system32;C:\Windows
+
   # Loads trunk build, updates MSYS2 / MinGW to most recent gcc compiler, replaces GDBM & OpenSSL packages
   - if %ruby_version%==_trunk (
       appveyor DownloadFile https://ci.appveyor.com/api/projects/MSP-Greg/ruby-loco/artifacts/ruby_trunk.7z -FileName C:\ruby_trunk.7z &
@@ -10,15 +16,8 @@ init:
 version: "{build}"
 
 install:
-  - echo %PATH%
-
   - ruby --version
-  - where ruby
-
-  - gem --version
-  - where gem
-
-  - gem install bundler -v 1.16.0 --no-document --force --conservative
+  - gem update bundler --no-document --conservative
   - bundle config force_ruby_platform true
   - bundle install --jobs 3 --retry 3 --path av_bundle/%ruby_version%
 
@@ -27,22 +26,35 @@ build_script:
   - bundle exec rake compile
 
 test_script:
-  - bundle exec rake test
+  # set GEM_HOME to point to folder with bundler installed gems
+  - set GEM_HOME=av_bundle/%ruby_version%/ruby/%ruby_vers%
+  - rake test %TOPTS%
+  - ruby --version
 
 environment:
   matrix:
-    - ruby_version: '22'
+    - ruby_version: 22
+      ruby_vers: 2.2.0
     - ruby_version: 22-x64
-    - ruby_version: '23'
+      ruby_vers: 2.2.0
+    - ruby_version: 23
+      ruby_vers: 2.3.0
     - ruby_version: 23-x64
-    - ruby_version: '24'
+      ruby_vers: 2.3.0
+    - ruby_version: 24
+      ruby_vers: 2.4.0
     - ruby_version: 24-x64
+      ruby_vers: 2.4.0
     - ruby_version: _trunk
+      ruby_vers: 2.5.0
+      NOCOV: 1
+      TOPTS: TESTOPTS="--verbose"
 
   codeclimate_repo_token: '02530029b1e956220f05076c590b84b9ab078362c9083312eb2ad41cab138408'
 
+# Allow cache clearing with appveyor.yml changes
 cache:
-  - av_bundle
+  - av_bundle -> appveyor.yml
 
 matrix:
   fast_finish: true
