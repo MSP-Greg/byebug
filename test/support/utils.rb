@@ -260,7 +260,10 @@ module Byebug
         "RUBYOPT" => "-I #{byebug_dir}"
       }
 
+      reline_support = File.expand_path("reline.rb", __dir__)
+
       base["RUBYOPT"] += " -r simplecov" if simplecov
+      base["RUBYOPT"] += " -r #{reline_support}"
 
       base
     end
