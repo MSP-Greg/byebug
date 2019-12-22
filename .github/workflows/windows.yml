@@ -10,7 +10,7 @@ jobs:
       matrix:
         ruby: [ '9.9.x', '2.6.x', '2.5.x', '2.4.x' ]
     steps:
-      - uses: actions/checkout@master
+      - uses: actions/checkout@v2
       - name: Load Ruby, update gcc
         uses: MSP-Greg/actions-ruby@master
         with:
@@ -22,4 +22,7 @@ jobs:
       - name: compile
         run:  rake compile:byebug
       - name: test
-        run:  rake test
+        run:  |
+          md temp
+          $env:TMPDIR = "$env:GITHUB_WORKSPACE/temp"
+          rake test
