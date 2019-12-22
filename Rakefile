@@ -1,5 +1,7 @@
 # frozen_string_literal: true
 
+gem 'io-console', '>= 0.5.3'
+
 require "bundler/gem_tasks"
 require "chandler/tasks"
 require "rake/extensiontask"
