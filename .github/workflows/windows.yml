@@ -25,4 +25,7 @@ jobs:
         run:  |
           md temp
           $env:TMPDIR = "$env:GITHUB_WORKSPACE/temp"
-          rake test
+          # Actions uses UTF8, causes test failures, similar to normal OS setup
+          [Console]::OutputEncoding = [System.Text.Encoding]::GetEncoding("IBM437")
+          [Console]::InputEncoding  = [System.Text.Encoding]::GetEncoding("IBM437")
+          bundle exec rake test
