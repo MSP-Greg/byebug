@@ -5,7 +5,7 @@ source "https://rubygems.org"
 gemspec
 
 gem "chandler", "0.9.0"
-gem "io-console", "0.5.3", :git => "https://github.com/ruby/io-console.git", :tag => "v0.5.3"
+gem "io-console", "0.5.3" # , :git => "https://github.com/ruby/io-console.git", :tag => "v0.5.3"
 gem "mdl", "0.8.0"
 gem "minitest", "~> 5.11"
 gem "pry", "0.12.2"

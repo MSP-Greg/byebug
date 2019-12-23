@@ -1,5 +1,8 @@
 # frozen_string_literal: true
 
+gem 'io-console', '>= 0.5.3'
+
+require "io-console"
 require "bundler/gem_tasks"
 require "chandler/tasks"
 require "rake/extensiontask"
@@ -31,7 +34,7 @@ Rake::ExtensionTask.new("byebug", spec) { |ext| ext.lib_dir = "lib/byebug" }
 
 desc "Runs the test suite"
 task :test do
-  gem 'io-console', '>= 0.5.3'
+  #gem 'io-console', '>= 0.5.3'
   require_relative "test/minitest_runner"
 
   exit 1 unless Byebug::MinitestRunner.new.run

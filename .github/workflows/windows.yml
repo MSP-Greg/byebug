@@ -16,6 +16,8 @@ jobs:
         with:
           ruby-version: ${{ matrix.ruby }}
           base: update
+      - name: io-console force
+        run: gem install io-console ">=0.5.3" --conservative --no-document
       - name: Install dependencies
         run:  bin/setup.sh
         shell: bash
