@@ -2,7 +2,7 @@
 
 gem 'io-console', '>= 0.5.3'
 
-require "io-console"
+require "io/console"
 require "bundler/gem_tasks"
 require "chandler/tasks"
 require "rake/extensiontask"
