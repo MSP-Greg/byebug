@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-gem 'io-console', '>= 0.5.3'
+gem 'io-console', '>= 0.5.6'
 
 require "io/console"
 require "bundler/gem_tasks"
