@@ -19,12 +19,12 @@ jobs:
       - name: Install dependencies
         run:  bundle install --jobs 3 --retry 3 --path=.bundle/byebug
       - name: compile
-        run:  rake compile:byebug
+        run:  bundle exec rake compile:byebug
       - name: test
         run:  |
           md temp
-          $env:TMPDIR = "$env:GITHUB_WORKSPACE/temp"
+          $env:TMPDIR = '$env:GITHUB_WORKSPACE/temp'
           # Actions uses UTF8, causes test failures, similar to normal OS setup
-          [Console]::OutputEncoding = [System.Text.Encoding]::GetEncoding("IBM437")
-          [Console]::InputEncoding  = [System.Text.Encoding]::GetEncoding("IBM437")
+          [Console]::OutputEncoding = [System.Text.Encoding]::GetEncoding('IBM437')
+          [Console]::InputEncoding  = [System.Text.Encoding]::GetEncoding('IBM437')
           bundle exec rake test
