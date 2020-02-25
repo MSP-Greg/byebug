@@ -1,9 +1,5 @@
 # frozen_string_literal: true
 
-if RUBY_PLATFORM.include? 'mingw'
-  gem 'io-console', '>= 0.5.0'
-end
-
 require "io/console"
 require "bundler/gem_tasks"
 require "chandler/tasks"
