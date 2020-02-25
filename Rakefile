@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 if RUBY_PLATFORM.include? 'mingw'
-  gem 'io-console', '>= 0.5.6'
+  gem 'io-console', '>= 0.5.0'
 end
 
 require "io/console"

@@ -26,9 +26,6 @@ jobs:
           ruby-version: ${{ matrix.ruby }}
           base: update
 
-      - name: io-console force
-        run: gem install io-console ">=0.5.6" --conservative --no-document
-
       - name: Install dependencies
         run: |
           gem update --system 3.1.2

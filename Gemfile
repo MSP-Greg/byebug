@@ -7,7 +7,6 @@ gemspec
 gem "chandler", "0.9.0"
 
 install_if -> { RUBY_PLATFORM.include? 'mingw' } do
-  gem "io-console", ">= 0.5.6"
   gem "reline", ">= 0.1.3"
 end
 
