@@ -11,15 +11,30 @@ jobs:
         ruby: [ mingw, 2.7, 2.6, 2.5 ]
     steps:
       - uses: actions/checkout@v2
+
+      - name: Cache - .downloaded-cache
+        uses: actions/cache@v1
+        with:
+          path: .bundle/byebug
+          key: dl-cache-win-${{ matrix.ruby }}-${{ github.sha }}
+          restore-keys: |
+            dl-cache-win-${{ matrix.ruby }}-
+
       - name: Load Ruby, update gcc
         uses: MSP-Greg/actions-ruby@v1
         with:
           ruby-version: ${{ matrix.ruby }}
           base: update
+
       - name: Install dependencies
-        run:  bundle install --jobs 3 --retry 3 --path=.bundle/byebug
+        run: |
+          gem update --system 3.1.2
+          gem install bundler --version 2.1.4 --force
+          bundle install --jobs 3 --retry 3 --path=.bundle/byebug
+
       - name: compile
         run:  bundle exec rake compile:byebug
+
       - name: test
         run:  |
           md temp
