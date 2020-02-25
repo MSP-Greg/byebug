@@ -8,19 +8,16 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        ruby: [ '9.9.x', '2.6.x', '2.5.x' ]
+        ruby: [ mingw, 2.7, 2.6, 2.5 ]
     steps:
       - uses: actions/checkout@v2
       - name: Load Ruby, update gcc
-        uses: MSP-Greg/actions-ruby@master
+        uses: MSP-Greg/actions-ruby@v1
         with:
           ruby-version: ${{ matrix.ruby }}
           base: update
-      - name: io-console force
-        run: gem install io-console ">=0.5.3" --conservative --no-document
       - name: Install dependencies
-        run:  bin/setup.sh
-        shell: bash
+        run:  bundle install --jobs 3 --retry 3 --path=.bundle/byebug
       - name: compile
         run:  rake compile:byebug
       - name: test
